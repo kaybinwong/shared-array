@@ -93,6 +93,43 @@ At the moment this function only works on Linux because it accesses
 files exposed under `/dev/shm`.  There doesn't seem to be a portable
 method of doing that.
 
+### `SharedArray.msync(array, flags)`
+
+This function is a wrapper around `msync(2)` and is only useful when
+using file-backed arrays (i.e. not POSIX shared memory). msync(2)
+flushes the mapped memory region back to the filesystem. The `flags`
+are exported as constants in the module definition (see below) and are
+a 1:1 map of the `msync(2)` flags, please refer to the manual page of
+`msync(2)` for details.
+
+### `SharedArray.mlock(array)`
+
+This function is a wrapper around `mlock(2)`: lock the memory map into
+RAM, preventing that memory from being paged to the swap area.
+
+### `SharedArray.munlock(array)`
+
+This function is a wrapper around `munlock(2)`: unlock the memory map,
+allowing that memory to be paged to the swap area.
+
+## Constants
+
+### `SharedArray.MS_ASYNC`
+
+Flag for `SharedArray.msync()`. Specifies that an update be scheduled,
+but the call returns immediately.
+
+### `SharedArray.MS_SYNC`
+
+Flag for `SharedArray.msync()`. Requests an update and waits for it to
+complete.
+
+### `SharedArray.MS_INVALIDATE`
+
+Flag for `SharedArray.msync()`. Asks to invalidate other mappings of
+the same file (so that they can be updated with the fresh values just
+written).
+
 ## Requirements
 
 * Python 2.7 or 3+
