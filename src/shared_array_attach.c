@@ -64,9 +64,11 @@ static PyObject *do_attach(const char *name)
 	}
 
 	/* Check the number of dimensions */
-	if (meta.ndims > SHARED_ARRAY_NDIMS_MAX) {
+	if (meta.ndims > NPY_MAXDIMS) {
 		close(fd);
-		PyErr_SetString(PyExc_ValueError, "Too many dimensions, recompile SharedArray!");
+		PyErr_Format(PyExc_ValueError,
+			     "number of dimensions must be within [0, %d]",
+			     NPY_MAXDIMS);
 		return NULL;
 	}
 

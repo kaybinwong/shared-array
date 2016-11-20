@@ -43,8 +43,10 @@ static PyObject *do_create(const char *name, int ndims, npy_intp *dims, PyArray_
 	PyLeonObject *leon;
 
 	/* Check the number of dimensions */
-	if (ndims > SHARED_ARRAY_NDIMS_MAX) {
-		PyErr_SetString(PyExc_ValueError, "Too many dimensions, recompile SharedArray!");
+	if (ndims > NPY_MAXDIMS) {
+		PyErr_Format(PyExc_ValueError,
+			     "number of dimensions must be within [0, %d]",
+			     NPY_MAXDIMS);
 		return NULL;
 	}
 

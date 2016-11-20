@@ -30,16 +30,13 @@
 /* Magic header */
 #define SHARED_ARRAY_MAGIC	"[SharedArray]"
 
-/* Maximum number of dimensions */
-#define SHARED_ARRAY_NDIMS_MAX	16
-
 /* Array metadata */
 struct array_meta {
 	char	magic[16];
 	size_t	size;
 	int	typenum;
 	int	ndims;
-	npy_intp dims[SHARED_ARRAY_NDIMS_MAX];
+	npy_intp dims[NPY_MAXDIMS];
 } __attribute__ ((packed));
 
 /* ArrayDesc object */
