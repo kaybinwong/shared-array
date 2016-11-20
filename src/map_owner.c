@@ -31,6 +31,25 @@ static void do_dealloc(PyMapOwnerObject *self)
 }
 
 /*
+ * List of methods
+ */
+static PyMethodDef methods[] = {
+	{ "msync", (PyCFunction) map_owner_msync,
+	  METH_VARARGS | METH_KEYWORDS,
+	  "Synchronise a file with a memory map (msync(2) wrapper)" },
+
+	{ "mlock", (PyCFunction) map_owner_mlock,
+	  METH_VARARGS,
+	  "Lock the array in memory (mlock(2) wrapper)" },
+
+	{ "munlock", (PyCFunction) map_owner_munlock,
+	  METH_VARARGS,
+	  "Unlock the array in memory (munlock(2) wrapper)" },
+
+	{ NULL, NULL, 0, NULL }
+};
+
+/*
  * MapOwner type definition
  */
 PyTypeObject PyMapOwner_Type = {
@@ -61,7 +80,7 @@ PyTypeObject PyMapOwner_Type = {
 	0,					/* tp_weaklistoffset	*/
 	0,					/* tp_iter		*/
 	0,					/* tp_iternext		*/
-	0,					/* tp_methods		*/
+	methods,				/* tp_methods		*/
 	0,					/* tp_members		*/
 	0,					/* tp_getset		*/
 	0,					/* tp_base		*/

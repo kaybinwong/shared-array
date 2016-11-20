@@ -22,6 +22,7 @@
 #include <Python.h>
 #include <structseq.h>
 #include <numpy/arrayobject.h>
+#include <sys/mman.h>
 #include "shared_array.h"
 #include "map_owner.h"
 
@@ -52,6 +53,18 @@ static PyMethodDef module_functions[] = {
 	{ "list", (PyCFunction) shared_array_list,
 	  METH_VARARGS,
 	  "List all existing numpy arrays from shared memory" },
+
+	{ "msync", (PyCFunction) shared_array_msync,
+	  METH_VARARGS | METH_KEYWORDS,
+	  "Synchronise a file with a memory map (msync(2) wrapper)" },
+
+	{ "mlock", (PyCFunction) shared_array_mlock,
+	  METH_VARARGS | METH_KEYWORDS,
+	  "Lock the array in memory (mlock(2) wrapper)" },
+
+	{ "munlock", (PyCFunction) shared_array_munlock,
+	  METH_VARARGS | METH_KEYWORDS,
+	  "Unlock the array in memory (munlock(2) wrapper)" },
 
 	{ NULL, NULL, 0, NULL }
 };
@@ -95,6 +108,11 @@ static PyObject *module_init(void)
 	/* Register the module */
 	if (!(m = CREATE_MODULE(module_name, module_functions, module_docstring)))
 		return NULL;
+
+	/* Register constants */
+	PyModule_AddIntConstant(m, "MS_ASYNC", MS_ASYNC);
+	PyModule_AddIntConstant(m, "MS_SYNC", MS_SYNC);
+	PyModule_AddIntConstant(m, "MS_INVALIDATE", MS_INVALIDATE);
 
 	/* Register the MapOwner type */
 	PyType_Ready(&PyMapOwner_Type);

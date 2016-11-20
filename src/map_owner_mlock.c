@@ -16,27 +16,15 @@
  * along with SharedArray.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __MAP_OWNER_H__
-#define __MAP_OWNER_H__
-
+#include <sys/mman.h>
 #include <Python.h>
+#include "map_owner.h"
 
-/* MapOwner object */
-typedef struct {
-	PyObject_HEAD
-	void	*map_addr;
-	size_t	map_size;
-} PyMapOwnerObject;
+PyObject *map_owner_mlock(PyMapOwnerObject *self, PyObject *args)
+{
+	/* Call mlock(2) */
+	if (mlock(self->map_addr, self->map_size) < 0)
+		return PyErr_SetFromErrno(PyExc_OSError);
 
-/* Class type definition */
-extern PyTypeObject PyMapOwner_Type;
-
-/* Methods */
-extern PyObject *map_owner_msync(PyMapOwnerObject *self, PyObject *args, PyObject *kwds);
-extern PyObject *map_owner_mlock(PyMapOwnerObject *self, PyObject *args);
-extern PyObject *map_owner_munlock(PyMapOwnerObject *self, PyObject *args);
-
-/* C API */
-#define PyMapOwner_Check(op)	PyObject_TypeCheck(op, &PyMapOwner_Type)
-
-#endif /* !__MAP_OWNER_H__ */
+	Py_RETURN_NONE;
+}
