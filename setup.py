@@ -20,18 +20,14 @@ from distutils.core import setup, Extension
 from glob import glob
 from os import path
 import numpy
-
-here = path.abspath(path.dirname(__file__))
-
-def read(fname):
-    return open(path.join(here, fname)).read()
+import pypandoc
 
 setup(name    = 'SharedArray',
       version = '2.0',
 
       # Description
       description      = 'Share numpy arrays between processes',
-      long_description = read('README.md'),
+      long_description = pypandoc.convert('README.md', 'rst'),
 
       # Contact
       author       = 'Mathieu Mirmont',
@@ -57,7 +53,7 @@ setup(name    = 'SharedArray',
       # Compilation
       ext_modules  = [
           Extension('SharedArray',
-                    glob(path.join(here, 'src', '*.c')),
+                    glob(path.join('.', 'src', '*.c')),
                     libraries = [ 'rt' ],
                     include_dirs=[numpy.get_include()])
       ])
