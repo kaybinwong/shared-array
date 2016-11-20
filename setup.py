@@ -23,7 +23,7 @@ import numpy
 import pypandoc
 
 setup(name    = 'SharedArray',
-      version = '2.0',
+      version = '2.0.1',
 
       # Description
       description      = 'Share numpy arrays between processes',
