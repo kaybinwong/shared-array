@@ -23,6 +23,7 @@
 #include <structseq.h>
 #include <numpy/arrayobject.h>
 #include "shared_array.h"
+#include "map_owner.h"
 
 /* Module name */
 static const char module_name[] = "SharedArray";
@@ -95,12 +96,12 @@ static PyObject *module_init(void)
 	if (!(m = CREATE_MODULE(module_name, module_functions, module_docstring)))
 		return NULL;
 
-	/* Register the Leon type */
-	PyType_Ready(&PyLeonObject_Type);
-	Py_INCREF(&PyLeonObject_Type);
-	PyModule_AddObject(m, module_name, (PyObject *) &PyLeonObject_Type);
+	/* Register the MapOwner type */
+	PyType_Ready(&PyMapOwner_Type);
+	Py_INCREF(&PyMapOwner_Type);
+	PyModule_AddObject(m, module_name, (PyObject *) &PyMapOwner_Type);
 
-	/* Register the Descr type */
+	/* Register the ArrayDescr type */
 	PyStructSequence_InitType(&PyArrayDescObject_Type, &PyArrayDescObject_Desc);
 	PyType_Ready(&PyArrayDescObject_Type);
 	Py_INCREF(&PyArrayDescObject_Type);

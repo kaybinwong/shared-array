@@ -27,6 +27,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include "shared_array.h"
+#include "map_owner.h"
 
 /*
  * Attach a numpy array from shared memory
@@ -37,8 +38,8 @@ static PyObject *do_attach(const char *name)
 	int fd;
 	size_t map_size;
 	void *map_addr;
-	PyObject *ret;
-	PyLeonObject *leon;
+	PyObject *array;
+	PyMapOwnerObject *map_owner;
 
 	/* Open the file */
 	if ((fd = open_file(name, O_RDWR, 0)) < 0)
@@ -81,18 +82,18 @@ static PyObject *do_attach(const char *name)
 	if (map_addr == MAP_FAILED)
 		return PyErr_SetFromErrnoWithFilename(PyExc_OSError, name);
 
-	/* Summon Leon */
-	leon = PyObject_MALLOC(sizeof (*leon));
-	PyObject_INIT((PyObject *) leon, &PyLeonObject_Type);
-	leon->data = map_addr;
-	leon->size = map_size;
+	/* Hand over the memory map to a MapOwner instance */
+	map_owner = PyObject_MALLOC(sizeof (*map_owner));
+	PyObject_INIT((PyObject *) map_owner, &PyMapOwner_Type);
+	map_owner->map_addr = map_addr;
+	map_owner->map_size = map_size;
 
 	/* Create the array object */
-	ret = PyArray_SimpleNewFromData(meta.ndims, meta.dims, meta.typenum, map_addr);
+	array = PyArray_SimpleNewFromData(meta.ndims, meta.dims, meta.typenum, map_addr);
 
-	/* Attach Leon to the array */
-	PyArray_SetBaseObject((PyArrayObject *) ret, (PyObject *) leon);
-	return ret;
+	/* Attach MapOwner to the array */
+	PyArray_SetBaseObject((PyArrayObject *) array, (PyObject *) map_owner);
+	return array;
 }
 
 /*

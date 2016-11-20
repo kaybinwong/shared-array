@@ -16,33 +16,29 @@
  * along with SharedArray.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define NPY_NO_DEPRECATED_API	NPY_1_8_API_VERSION
-#define PY_ARRAY_UNIQUE_SYMBOL	SHARED_ARRAY_ARRAY_API
-#define NO_IMPORT_ARRAY
-
-#include <Python.h>
 #include <sys/mman.h>
-#include "shared_array.h"
+#include <Python.h>
+#include "map_owner.h"
 
 /*
- * Deallocation function
+ * Destructor
  */
-static void leon_dealloc(PyLeonObject *op)
+static void do_dealloc(PyMapOwnerObject *self)
 {
 	/* Unmap the data */
-	if (munmap(op->data, op->size) < 0)
+	if (munmap(self->map_addr, self->map_size) < 0)
 		PyErr_SetFromErrno(PyExc_RuntimeError);
 }
 
 /*
- * SharedArrayObject type definition
+ * MapOwner type definition
  */
-PyTypeObject PyLeonObject_Type = {
+PyTypeObject PyMapOwner_Type = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"shared_array.leon",			/* tp_name		*/
-	sizeof (PyLeonObject),			/* tp_basicsize		*/
+	"shared_array.map_owner",		/* tp_name		*/
+	sizeof (PyMapOwnerObject),		/* tp_basicsize		*/
 	0,					/* tp_itemsize		*/
-	(destructor) leon_dealloc,		/* tp_dealloc		*/
+	(destructor) do_dealloc,		/* tp_dealloc		*/
 	0,					/* tp_print		*/
 	0,					/* tp_getattr		*/
 	0,					/* tp_setattr		*/

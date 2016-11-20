@@ -43,17 +43,8 @@ struct array_meta {
 extern PyStructSequence_Desc PyArrayDescObject_Desc;
 extern PyTypeObject PyArrayDescObject_Type;
 
-/* Leon object */
-typedef struct {
-	PyObject_HEAD
-	void	*data;
-	size_t	size;
-} PyLeonObject;
-
-extern PyTypeObject PyLeonObject_Type;
-
 /* Module functions */
-extern PyObject *shared_array_create(PyObject *self, PyObject *args, PyObject *kw);
+extern PyObject *shared_array_create(PyObject *self, PyObject *args, PyObject *kwds);
 extern PyObject *shared_array_attach(PyObject *self, PyObject *args);
 extern PyObject *shared_array_delete(PyObject *self, PyObject *args);
 extern PyObject *shared_array_list(PyObject *self, PyObject *args);
