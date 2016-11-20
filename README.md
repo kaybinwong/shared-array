@@ -178,3 +178,15 @@ To build and install the extension system-wide, type:
 
 	python setup.py build
 	sudo python setup.py install
+
+## Contact
+
+For updates and the browse the code, the canonical repository is:
+<https://parad0x.org/git/python/shared-array/>
+
+Packages are also available on PyPi at:
+<https://pypi.python.org/pypi/SharedArray>
+
+For bug reports, feature requests, suggestions, patches and everything
+else related to SharedArray, please contact the maintainer at:
+<mat@parad0x.org>.
