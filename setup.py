@@ -20,14 +20,23 @@ from distutils.core import setup, Extension
 from glob import glob
 from os import path
 import numpy
-import pypandoc
+
+# Convert a file to reStructuredText with pypandoc, when available,
+# otherwise return the raw file.
+def convert_to_rst(filename):
+    try:
+        import pypandoc
+        return pypandoc.convert(filename, 'rst')
+
+    except ImportError:
+        return open(filename).read()
 
 setup(name    = 'SharedArray',
       version = '2.0.1',
 
       # Description
       description      = 'Share numpy arrays between processes',
-      long_description = pypandoc.convert('README.md', 'rst'),
+      long_description = convert_to_rst('README.md'),
 
       # Contact
       author       = 'Mathieu Mirmont',
