@@ -41,7 +41,7 @@ setup(name    = 'SharedArray',
       # Contact
       author       = 'Mathieu Mirmont',
       author_email = 'mat@parad0x.org',
-      url          = 'http://parad0x.org/git/python/shared-array/about',
+      url          = 'https://gitlab.com/tenzing/shared-array',
 
       # License
       license   = 'https://www.gnu.org/licenses/gpl-2.0.html',
