@@ -19,6 +19,7 @@
 from distutils.core import setup, Extension
 from glob import glob
 from os import path
+import sys
 import numpy
 
 # Convert a file to reStructuredText with pypandoc, when available,
@@ -63,6 +64,6 @@ setup(name    = 'SharedArray',
       ext_modules  = [
           Extension('SharedArray',
                     glob(path.join('.', 'src', '*.c')),
-                    libraries = [ 'rt' ],
+                    libraries = [ 'rt' ] if sys.platform.startswith('linux') else [],
                     include_dirs=[numpy.get_include()])
       ])
