@@ -16,6 +16,11 @@
  * along with SharedArray.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* This only works on Linux where SHM segments are implemented as
+ * regular files in a tmpfs filesystem. There doesn't seem to be a
+ * portable way of listing SHM segments. */
+#ifdef __linux__
+
 #define NPY_NO_DEPRECATED_API	NPY_1_8_API_VERSION
 #define PY_ARRAY_UNIQUE_SYMBOL	SHARED_ARRAY_ARRAY_API
 #define NO_IMPORT_ARRAY
@@ -212,3 +217,5 @@ PyObject *shared_array_list(PyObject *self, PyObject *args)
 	/* Return the tuple */
 	return tuple;
 }
+
+#endif /* __linux__ */

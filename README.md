@@ -32,7 +32,7 @@ del a
 print(b[0])
 
 # See how "test" is still present in shared memory even though we
-# destroyed the array a.
+# destroyed the array a. This method only works on Linux.
 sa.list()
 
 # Now destroy the array "test" from memory.

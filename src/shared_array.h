@@ -43,11 +43,17 @@ struct array_meta {
 extern PyStructSequence_Desc PyArrayDescObject_Desc;
 extern PyTypeObject PyArrayDescObject_Type;
 
-/* Module functions */
+/* Main functions */
 extern PyObject *shared_array_create(PyObject *self, PyObject *args, PyObject *kwds);
 extern PyObject *shared_array_attach(PyObject *self, PyObject *args);
 extern PyObject *shared_array_delete(PyObject *self, PyObject *args);
+
+/* SHM list function */
+#ifdef __linux__
 extern PyObject *shared_array_list(PyObject *self, PyObject *args);
+#endif
+
+/* Memory locking functions */
 extern PyObject *shared_array_msync(PyObject *self, PyObject *args, PyObject *kwds);
 extern PyObject *shared_array_mlock(PyObject *self, PyObject *args, PyObject *kwds);
 extern PyObject *shared_array_munlock(PyObject *self, PyObject *args, PyObject *kwds);
