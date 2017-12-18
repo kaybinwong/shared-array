@@ -40,7 +40,7 @@ def convert_to_rst(filename):
         return open(filename).read()
 
 setup(name    = 'SharedArray',
-      version = '2.0.3',
+      version = '2.0.4',
 
       # Description
       description      = 'Share numpy arrays between processes',
