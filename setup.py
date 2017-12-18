@@ -20,7 +20,14 @@ from distutils.core import setup, Extension
 from glob import glob
 from os import path
 import sys
-import numpy
+
+# Fail gracefully if numpy isn't installed
+try:
+    import numpy
+    include_dirs = [numpy.get_include()]
+except:
+    include_dirs = []
+
 
 # Convert a file to reStructuredText with pypandoc, when available,
 # otherwise return the raw file.
@@ -61,9 +68,10 @@ setup(name    = 'SharedArray',
       ],
 
       # Compilation
+      install_requires=['numpy'],
       ext_modules  = [
           Extension('SharedArray',
                     glob(path.join('.', 'src', '*.c')),
                     libraries = [ 'rt' ] if sys.platform.startswith('linux') else [],
-                    include_dirs=[numpy.get_include()])
+                    include_dirs=include_dirs)
       ])
