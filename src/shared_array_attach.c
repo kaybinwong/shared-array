@@ -46,12 +46,14 @@ static PyObject *do_attach(const char *name)
 	if ((fd = open_file(name, O_RDWR, 0)) < 0)
 		return PyErr_SetFromErrnoWithFilename(PyExc_OSError, name);
 
-	if ( fstat(fd, &file_info) < 0 ) {
+	/* Find the file size */
+	if (fstat(fd, &file_info) < 0) {
 		close(fd);
 		return PyErr_SetFromErrnoWithFilename(PyExc_OSError, name);
 	}
 
-	if (file_info.st_size < sizeof(*meta)) {
+	/* Ignore short files */
+	if (file_info.st_size < sizeof (*meta)) {
 		close(fd);
 		PyErr_SetString(PyExc_IOError, "No SharedArray at this address");
 		return NULL;
@@ -64,9 +66,8 @@ static PyObject *do_attach(const char *name)
 	if (map_addr == MAP_FAILED)
 		return PyErr_SetFromErrnoWithFilename(PyExc_OSError, name);
 
-	meta = (struct array_meta *) (map_addr + (map_size - sizeof(*meta)));
-
 	/* Check the meta data */
+	meta = (struct array_meta *) (map_addr + (map_size - sizeof (*meta)));
 	if (strncmp(meta->magic, SHARED_ARRAY_MAGIC, sizeof (meta->magic))) {
 		munmap(map_addr, map_size);
 		PyErr_SetString(PyExc_IOError, "No SharedArray at this address");

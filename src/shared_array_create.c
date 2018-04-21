@@ -70,8 +70,9 @@ static PyObject *do_create(const char *name, int ndims, npy_intp *dims, PyArray_
 		return PyErr_SetFromErrnoWithFilename(PyExc_OSError, name);
 	}
 
-	/* Find actual file size after growing (on some systems it rounds up to 4K)*/
-	if ( fstat(fd, &file_info) < 0 ) {
+	/* Find the actual file size after growing (on some systems it rounds
+	 * up to 4K) */
+	if (fstat(fd, &file_info) < 0) {
 		close(fd);
 		return PyErr_SetFromErrnoWithFilename(PyExc_OSError, name);
 	}
@@ -83,8 +84,8 @@ static PyObject *do_create(const char *name, int ndims, npy_intp *dims, PyArray_
 	if (map_addr == MAP_FAILED)
 		return PyErr_SetFromErrnoWithFilename(PyExc_OSError, name);
 
-	/* Append meta-data to the array in memory */
-	meta = (struct array_meta *) (map_addr + (map_size - sizeof(*meta)));
+	/* Append the meta-data to the array in memory */
+	meta = (struct array_meta *) (map_addr + (map_size - sizeof (*meta)));
 	strncpy(meta->magic, SHARED_ARRAY_MAGIC, sizeof (meta->magic));
 	meta->size = size;
 	meta->typenum = dtype->type_num;
