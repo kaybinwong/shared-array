@@ -2,3 +2,4 @@
 /dist
 /MANIFEST
 *.so
+SharedArray.egg-info

@@ -2,3 +2,4 @@ include src/*.h
 include src/*.c
 include setup.py
 include README.md
+include LICENSE.txt

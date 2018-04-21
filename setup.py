@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # This file is part of SharedArray.
-# Copyright (C) 2014-2017 Mathieu Mirmont <mat@parad0x.org>
+# Copyright (C) 2014-2018 Mathieu Mirmont <mat@parad0x.org>
 #
 # SharedArray is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,10 +16,11 @@
 # You should have received a copy of the GNU General Public License
 # along with SharedArray.  If not, see <http://www.gnu.org/licenses/>.
 
-from distutils.core import setup, Extension
-from glob import glob
-from os import path
+from setuptools import setup, Extension
+import codecs
+import glob
 import sys
+import os
 
 # Fail gracefully if numpy isn't installed
 try:
@@ -28,50 +29,50 @@ try:
 except:
     include_dirs = []
 
+# Get the long description from the README file
+here = os.path.abspath(os.path.dirname(__file__))
+with codecs.open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
 
-# Convert a file to reStructuredText with pypandoc, when available,
-# otherwise return the raw file.
-def convert_to_rst(filename):
-    try:
-        import pypandoc
-        return pypandoc.convert(filename, 'rst')
+setup(
+    name = 'SharedArray',
+    version = '2.0.4',
 
-    except ImportError:
-        return open(filename).read()
+    # Description
+    description = 'Share numpy arrays between processes',
+    long_description = long_description,
+    long_description_content_type = 'text/markdown',
 
-setup(name    = 'SharedArray',
-      version = '2.0.4',
+    # Contact
+    url = 'https://gitlab.com/tenzing/shared-array',
+    author = 'Mathieu Mirmont',
+    author_email = 'mat@parad0x.org',
 
-      # Description
-      description      = 'Share numpy arrays between processes',
-      long_description = convert_to_rst('README.md'),
+    # Classifiers
+    classifiers = [
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'Intended Audience :: Science/Research',
+        'Topic :: Scientific/Engineering',
+        'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
+        'Operating System :: POSIX',
+        'Operating System :: Unix',
+        'Programming Language :: C',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+    ],
+    keywords = 'numpy array shared memory shm',
 
-      # Contact
-      author       = 'Mathieu Mirmont',
-      author_email = 'mat@parad0x.org',
-      url          = 'https://gitlab.com/tenzing/shared-array',
-
-      # License
-      license   = 'https://www.gnu.org/licenses/gpl-2.0.html',
-
-      # Extras for pip
-      keywords  = 'numpy array shared memory shm',
-      classifiers  = [
-          'Development Status :: 5 - Production/Stable',
-          'Intended Audience :: Developers',
-          'Intended Audience :: Science/Research',
-          'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
-          'Operating System :: POSIX',
-          'Operating System :: Unix',
-          'Programming Language :: C',
-          'Topic :: Scientific/Engineering'
-      ],
-
-      # Compilation
-      install_requires=['numpy'],
-      ext_modules  = [
-          Extension('SharedArray',
-                    glob(path.join('.', 'src', '*.c')),
-                    libraries = [ 'rt' ] if sys.platform.startswith('linux') else [],
-                    include_dirs=include_dirs)
-      ])
+    # Compilation
+    install_requires = ['numpy'],
+    ext_modules = [
+        Extension('SharedArray',
+                  glob.glob(os.path.join('.', 'src', '*.c')),
+                  libraries = [ 'rt' ] if sys.platform.startswith('linux') else [],
+                  include_dirs = include_dirs)
+    ],
+)
