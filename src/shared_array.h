@@ -53,11 +53,6 @@ extern PyObject *shared_array_delete(PyObject *self, PyObject *args);
 extern PyObject *shared_array_list(PyObject *self, PyObject *args);
 #endif
 
-/* Memory locking functions */
-extern PyObject *shared_array_msync(PyObject *self, PyObject *args, PyObject *kwds);
-extern PyObject *shared_array_mlock(PyObject *self, PyObject *args, PyObject *kwds);
-extern PyObject *shared_array_munlock(PyObject *self, PyObject *args, PyObject *kwds);
-
 /* Support functions */
 extern int open_file(const char *name, int flags, mode_t mode);
 extern int unlink_file(const char *name);
