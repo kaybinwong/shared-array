@@ -36,7 +36,7 @@ with codecs.open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name = 'SharedArray',
-    version = '2.0.4',
+    version = '3.0.0',
 
     # Description
     description = 'Share numpy arrays between processes',
