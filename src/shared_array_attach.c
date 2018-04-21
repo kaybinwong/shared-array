@@ -26,6 +26,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <string.h>
 #include "shared_array.h"
 #include "map_owner.h"
 
@@ -88,6 +89,7 @@ static PyObject *do_attach(const char *name)
 	PyObject_INIT((PyObject *) map_owner, &PyMapOwner_Type);
 	map_owner->map_addr = map_addr;
 	map_owner->map_size = map_size;
+	map_owner->name = strdup(name);
 
 	/* Create the array object */
 	array = PyArray_SimpleNewFromData(meta->ndims, meta->dims, meta->typenum, map_addr);
