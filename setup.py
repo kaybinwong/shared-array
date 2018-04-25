@@ -17,7 +17,6 @@
 # along with SharedArray.  If not, see <http://www.gnu.org/licenses/>.
 
 from setuptools import setup, Extension
-import codecs
 import glob
 import sys
 import os
@@ -29,10 +28,20 @@ try:
 except:
     include_dirs = []
 
-# Get the long description from the README file
-here = os.path.abspath(os.path.dirname(__file__))
-with codecs.open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
-    long_description = f.read()
+# Get the long description from the README.md file and convert it to
+# reStructuredText if pypandoc is installed.
+def get_long_description():
+    here = os.path.abspath(os.path.dirname(__file__))
+    readme = os.path.join(here, 'README.md')
+
+    try:
+        import pypandoc
+        return pypandoc.convert(readme, 'rst')
+
+    except ImportError:
+        import codecs
+        with codecs.open(readme, encoding='utf-8') as f:
+            return f.read()
 
 setup(
     name = 'SharedArray',
@@ -40,8 +49,7 @@ setup(
 
     # Description
     description = 'Share numpy arrays between processes',
-    long_description = long_description,
-    long_description_content_type = 'text/markdown',
+    long_description = get_long_description(),
 
     # Contact
     url = 'https://gitlab.com/tenzing/shared-array',
