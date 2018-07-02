@@ -154,6 +154,14 @@ This constant string is the name of the array as passed to
 `SharedArray.create()` or `SharedArray.attach()`. It may be passed to
 `SharedArray.delete()`.
 
+### addr
+
+Base address of the array in memory.
+
+### size
+
+Size of the array in memory.
+
 ## Requirements
 
 * Python 2.7 or 3+

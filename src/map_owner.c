@@ -62,6 +62,12 @@ static struct PyMemberDef members[] = {
 	{ "name", T_STRING, offsetof (PyMapOwnerObject, name), 0,
 	  "Name of the file used to back this array" },
 
+	{ "addr", T_PYSSIZET, offsetof (PyMapOwnerObject, map_addr), 0,
+	  "Base address of the shared array in memory" },
+
+	{ "size", T_PYSSIZET, offsetof (PyMapOwnerObject, map_size), 0,
+	  "Size of the shared array in memory" },
+
 	{ NULL, 0, 0, 0, NULL }
 };
 
