@@ -35,6 +35,7 @@ struct array_meta {
 	char	magic[16];
 	size_t	size;
 	int	typenum;
+	int	itemsize;
 	int	ndims;
 	npy_intp dims[NPY_MAXDIMS];
 } __attribute__ ((packed));

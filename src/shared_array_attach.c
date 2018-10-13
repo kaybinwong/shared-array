@@ -93,7 +93,9 @@ static PyObject *do_attach(const char *name)
 	map_owner->name = strdup(name);
 
 	/* Create the array object */
-	array = PyArray_SimpleNewFromData(meta->ndims, meta->dims, meta->typenum, map_addr);
+	array = PyArray_New(&PyArray_Type, meta->ndims, meta->dims,
+	                    meta->typenum, NULL, map_addr, meta->itemsize,
+	                    NPY_ARRAY_CARRAY, NULL);
 
 	/* Attach MapOwner to the array */
 	PyArray_SetBaseObject((PyArrayObject *) array, (PyObject *) map_owner);
