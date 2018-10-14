@@ -28,6 +28,39 @@ try:
 except:
     include_dirs = []
 
+
+def get_version():
+    """Return the version number of this package."""
+
+    # Use $CI_COMMIT_TAG is it is set. This variable comes from the
+    # GitLab CI environment and points as the git tag being built, if
+    # any. This is the path followed by official releases.
+    try:
+        return os.environ['CI_COMMIT_TAG']
+    except:
+        pass
+
+    # Read the first line of a file named .version in the project
+    # root. This file is created when creating offical releases and
+    # publishing the source tree to pypi. This is the path followed
+    # when building the source package downloaded from PyPI.
+    try:
+        return open('.version').readlines()[0].strip()
+    except:
+        pass
+
+    # Get the version from the git tree. This version string won't
+    # comply with PEP 440 but we don't care because it's not intended
+    # for distribution. This is the path followed when building the
+    # package from the git tree.
+    try:
+        import subprocess
+        command = ['git', 'describe', '--tags', '--always', '--dirty']
+        return subprocess.check_output(command)
+    except:
+        pass
+
+
 # Get the long description from the README.md file and convert it to
 # reStructuredText if pypandoc is installed.
 def get_long_description():
@@ -45,7 +78,7 @@ def get_long_description():
 
 setup(
     name = 'SharedArray',
-    version = '3.0.0',
+    version = get_version(),
 
     # Description
     description = 'Share numpy arrays between processes',
