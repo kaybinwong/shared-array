@@ -66,7 +66,7 @@ won't be lost when the numpy array is deleted, nor when the python
 interpreter exits. To delete a shared array and reclaim system
 resources use the `SharedArray.delete()` function.
  
-### SharedArray.attach(name)
+### SharedArray.attach(name, readonly=False)
 
 This function attaches a previously created array in shared memory
 identified by `name`, which can use the `file://` prefix to indicate
