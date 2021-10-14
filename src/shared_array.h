@@ -46,7 +46,7 @@ extern PyTypeObject PyArrayDescObject_Type;
 
 /* Main functions */
 extern PyObject *shared_array_create(PyObject *self, PyObject *args, PyObject *kwds);
-extern PyObject *shared_array_attach(PyObject *self, PyObject *args);
+extern PyObject *shared_array_attach(PyObject *self, PyObject *args, PyObject *kwds);
 extern PyObject *shared_array_delete(PyObject *self, PyObject *args);
 
 /* SHM list function */

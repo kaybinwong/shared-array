@@ -43,7 +43,7 @@ static PyMethodDef module_functions[] = {
 	  "Create a numpy array in shared memory" },
 
 	{ "attach", (PyCFunction) shared_array_attach,
-	  METH_VARARGS,
+	  METH_VARARGS | METH_KEYWORDS,
 	  "Attach an existing numpy array from shared memory" },
 
 	{ "delete", (PyCFunction) shared_array_delete,

@@ -34,7 +34,7 @@
 /*
  * Attach a numpy array from shared memory
  */
-static PyObject *do_attach(const char *name)
+static PyObject *do_attach(const char *name, int readonly)
 {
 	struct array_meta *meta;
 	int fd;
@@ -45,7 +45,7 @@ static PyObject *do_attach(const char *name)
 	PyMapOwnerObject *map_owner;
 
 	/* Open the file */
-	if ((fd = open_file(name, O_RDWR, 0)) < 0)
+	if ((fd = open_file(name, (readonly ? O_RDONLY : O_RDWR), 0)) < 0)
 		return PyErr_SetFromErrnoWithFilename(PyExc_OSError, name);
 
 	/* Find the file size */
@@ -105,14 +105,18 @@ static PyObject *do_attach(const char *name)
 /*
  * Method: SharedArray.attach()
  */
-PyObject *shared_array_attach(PyObject *self, PyObject *args)
+PyObject *shared_array_attach(PyObject *self, PyObject *args, PyObject *kwds)
 {
+	static char *kwlist[] = { "name", "readonly", NULL };
 	const char *name;
+	int readonly = 0;
 
 	/* Parse the arguments */
-	if (!PyArg_ParseTuple(args, "s", &name))
+	if (!PyArg_ParseTupleAndKeywords(args, kwds, "s|i", kwlist,
+					 &name,
+					 &readonly))
 		return NULL;
 
 	/* Now do the real thing */
-	return do_attach(name);
+	return do_attach(name, readonly);
 }
